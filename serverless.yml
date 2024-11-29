@@ -1,0 +1,43 @@
+service: ratus-back
+app: ratus-back
+
+org: antoinefamibelle
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-3
+  environment:
+    GOCARDLESS_ACCESS: ${env:GOCARDLESS_ACCESS}
+    GOCARDLESS_SECRET_ID: ${env:GOCARDLESS_SECRET_ID}
+    GOCARDLESS_SECRET_KEY: ${env:GOCARDLESS_SECRET_KEY}
+
+functions:
+  api:
+    handler: dist/app.handler
+    events:
+      - http:
+          path: /ping
+          method: get
+      - http:
+          path: /bank/list
+          method: get
+      - http:
+          path: /bank/agreements
+          method: post
+      - http:
+          path: /bank/requisitions
+          method: post
+      - http:
+          path: /bank/token/new
+          method: post
+      - http:
+          path: /bank/token/refresh
+          method: post
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3001
